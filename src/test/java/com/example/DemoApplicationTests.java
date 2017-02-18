@@ -14,7 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(DemoApplication.class)
+@WebMvcTest(HelloController.class)
 public class DemoApplicationTests {
 
 	@Autowired
@@ -29,9 +29,9 @@ public class DemoApplicationTests {
 
 	@Test
 	public void deleteEndpointTest() throws Exception {
-		this.mvc.perform(patch("/").accept(MediaType.TEXT_PLAIN))
+		this.mvc.perform(delete("/").accept(MediaType.TEXT_PLAIN))
 				.andExpect(status().isOk())
-				.andExpect(content().string("DELETE in index route"));
+				.andExpect(content().string("DELETE to index route"));
 	}
 
 }
