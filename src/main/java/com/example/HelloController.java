@@ -1,10 +1,9 @@
 
 package com.example;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 public class HelloController {
@@ -19,5 +18,20 @@ public class HelloController {
 
     @DeleteMapping("/")
     public String deleteRoute() { return "DELETE to index route"; }
+
+    @GetMapping("/games")
+    public String getIndividualParams(@RequestParam(value = "genre", defaultValue = "fantasy") String genre) {
+        return String.format("Genre is : %s", genre);
+    }
+
+    @GetMapping("/cars")
+    public String getCarsWithMappedParams(@RequestParam Map query) {
+        return query.toString();
+    }
+
+    @GetMapping("/records")
+    public String getRecordsWithDetails(RecordInfo recordInfo) {
+        return recordInfo.getBpm();
+    }
 
 }
