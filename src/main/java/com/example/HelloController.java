@@ -19,6 +19,10 @@ public class HelloController {
     @DeleteMapping("/")
     public String deleteRoute() { return "DELETE to index route"; }
 
+    /**
+     * Query Param practice
+     */
+
     @GetMapping("/games")
     public String getIndividualParams(@RequestParam(value = "genre", defaultValue = "fantasy") String genre) {
         return String.format("Genre is : %s", genre);
@@ -41,4 +45,27 @@ public class HelloController {
                 recordInfo.getArtist());
     }
 
+    /**
+     * PATH VARIABLE PRACTICE
+     */
+
+    @GetMapping("/hacker/{id}")
+    public String getHackerById(@PathVariable String id) {
+        return String.format("Hacker %s is Leroy Jenkins", id);
+    }
+
+    @GetMapping("/mission/{title}/comments/{commentId}")
+    public String getCommentForMission(@PathVariable Map pathVariables) {
+        StringBuilder sb = new StringBuilder("Results : ");
+        pathVariables.forEach((k,v) -> sb.append(v + " "));
+
+        return sb.toString().trim();
+    }
+
+    @GetMapping("/movie/{title}/comments/{commentId}")
+    public String getCommentForMovie(Movie movie) {
+        return String.format("The troll, Leeroy Jenkins, has posted comment %s on %s",
+                movie.getCommentId(),
+                movie.getTitle());
+    }
 }

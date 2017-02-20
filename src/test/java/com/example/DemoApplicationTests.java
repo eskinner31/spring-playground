@@ -57,4 +57,35 @@ public class DemoApplicationTests {
 				.andExpect(content().string("Genre is house. BPM is 132. Artist is avicii"));
 	}
 
+	@Test
+	public void getHackByIdTest() throws Exception {
+		int hackerId = 32;
+
+		this.mvc.perform(get(String.format("/hacker/%d", hackerId)))
+				.andExpect(status().isOk())
+				.andExpect(content().string("Hacker 32 is Leroy Jenkins"));
+	}
+
+	@Test
+	public void getCommentForMissionTest() throws Exception {
+		String title = "phoenixdown";
+		int commentId = 2;
+
+		this.mvc.perform(get(String.format("/mission/%s/comments/%d", title, commentId)))
+				.andExpect(status().isOk())
+				.andExpect(content().string("Results : phoenixdown 2"));
+	}
+
+	@Test
+	public void getCommentForMovieTest() throws Exception {
+		String title = "battleship";
+		int commentId = 2;
+
+		this.mvc.perform(get(String.format("/movie/%s/comments/%d", title, commentId)))
+				.andExpect(status().isOk())
+				.andExpect(content().string("The troll, Leeroy Jenkins, has posted comment 2" +
+						" on battleship"));
+
+	}
+
 }
