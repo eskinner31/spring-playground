@@ -1,6 +1,7 @@
 
 package com.example;
 
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -67,5 +68,28 @@ public class HelloController {
         return String.format("The troll, Leeroy Jenkins, has posted comment %s on %s",
                 movie.getCommentId(),
                 movie.getTitle());
+    }
+
+    /**
+     * Form Data Route
+     */
+
+    @PostMapping("/feedback")
+    public String postFeedback(@RequestBody String body) {
+        return body;
+    }
+
+    @PostMapping(value = "/detailedfeedback", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public String postDetailedFeedback(@RequestParam Map<String, String> body) {
+        return body.toString();
+    }
+
+    @PostMapping(value = "/objectfeedback", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public String postDetailedFeedback(Feedback feedback) {
+
+        return String.format("%s %s %s",
+                feedback.getMessage(),
+                feedback.getName(),
+                feedback.getEmail());
     }
 }

@@ -7,10 +7,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
@@ -86,6 +85,47 @@ public class DemoApplicationTests {
 				.andExpect(content().string("The troll, Leeroy Jenkins, has posted comment 2" +
 						" on battleship"));
 
+	}
+
+	@Test
+	public void postFeedbackTest() throws Exception {
+
+		MockHttpServletRequestBuilder request = post("/feedback")
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("body", "Something Something Darkside");
+
+		this.mvc.perform(request)
+				.andExpect(status().isOk())
+				.andExpect(content().string("body=Something+Something+Darkside"));
+	}
+
+	@Test
+	public void postDetailedFeedbackTest() throws Exception {
+
+		MockHttpServletRequestBuilder request = post("/detailedfeedback")
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("body", "Something Something Darkside")
+				.param("name", "Palpatine");
+
+		this.mvc.perform(request)
+				.andExpect(status().isOk())
+				.andExpect(content().string("{body=Something Something Darkside, name=Palpatine}"));
+	}
+
+	@Test
+	public void postObjectFeedbackTest() throws Exception {
+
+		MockHttpServletRequestBuilder request = post("/objectfeedback")
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("name", "Palpatine")
+				.param("email", "sithlord@darkside.com")
+				.param("message", "Something Something Darkside");
+
+		this.mvc.perform(request)
+				.andExpect(status().isOk())
+				.andExpect(content().string("Something Something Darkside " +
+					"Palpatine " +
+					"sithlord@darkside.com"));
 	}
 
 }
