@@ -47,14 +47,14 @@ public class DemoApplicationTests {
 	public void queryStringCarsTest() throws Exception {
 		this.mvc.perform(get("/cars?type=suv&make=subaru&model=forester").accept(MediaType.TEXT_PLAIN))
 				.andExpect(status().isOk())
-				.andExpect(content().string("{type=suv, make=subaru, model=forester}"));
+				.andExpect(content().string("Results : suv subaru forester"));
 	}
 
 	@Test
 	public void queryStringRecordsTest() throws Exception {
 		this.mvc.perform(get("/records?bpm=132&genre=house&artist=avicii").accept(MediaType.TEXT_PLAIN))
 				.andExpect(status().isOk())
-				.andExpect(content().string("132"));
+				.andExpect(content().string("Genre is house. BPM is 132. Artist is avicii"));
 	}
 
 }

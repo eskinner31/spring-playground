@@ -26,12 +26,19 @@ public class HelloController {
 
     @GetMapping("/cars")
     public String getCarsWithMappedParams(@RequestParam Map query) {
-        return query.toString();
+        StringBuilder sb = new StringBuilder("Results : ");
+        query.forEach((k,v) -> sb.append(v + " "));
+
+        return sb.toString().trim();
     }
 
     @GetMapping("/records")
     public String getRecordsWithDetails(RecordInfo recordInfo) {
-        return recordInfo.getBpm();
+
+        return String.format("Genre is %s. BPM is %s. Artist is %s",
+                recordInfo.getGenre(),
+                recordInfo.getBpm(),
+                recordInfo.getArtist());
     }
 
 }
