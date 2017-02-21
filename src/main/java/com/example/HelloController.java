@@ -1,6 +1,7 @@
 
 package com.example;
 
+import com.google.gson.JsonObject;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -71,7 +72,7 @@ public class HelloController {
     }
 
     /**
-     * Form Data Route
+     * Form Data Routes
      */
 
     @PostMapping("/feedback")
@@ -92,4 +93,24 @@ public class HelloController {
                 feedback.getName(),
                 feedback.getEmail());
     }
+
+    /**
+     * JSON data Routes
+     */
+
+    @PostMapping("/json/object")
+    public String getJSONData(@RequestBody Kennel kennel) {
+        return kennel.getData().getPets()[0].getName().toString();
+    }
+
+    @PostMapping("/json/serial")
+    public String getJSONSerial(@RequestBody Kennel kennel) {
+        return kennel.getData().getPets()[0].getName().toString();
+    }
+
+    @PostMapping("/json/stringfile")
+    public String getJSONFile(@RequestBody Kennel kennel) {
+        return kennel.getData().getPets()[0].getName().toString();
+    }
+
 }

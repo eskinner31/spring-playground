@@ -1,5 +1,11 @@
 package com.example;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.sun.xml.internal.xsom.impl.WildcardImpl;
+import net.minidev.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +14,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -126,6 +138,67 @@ public class DemoApplicationTests {
 				.andExpect(content().string("Something Something Darkside " +
 					"Palpatine " +
 					"sithlord@darkside.com"));
+	}
+
+
+	/**
+	 * JSON TESTS
+	 */
+
+	@Test
+	public void testObjectParams() throws Exception {
+		MockHttpServletRequestBuilder request = post("/json/object")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("{\"kennelName\":\"Brickleberry\", \"data\": {\"pets\": [{\"name\": \"Waldo\", \"type\":\"dog\"}]}}");
+
+		this.mvc.perform(request)
+				.andExpect(status().isOk())
+				.andExpect(content().string("Waldo"));
+	}
+
+	@Test
+	public void testGsonJsonParams() throws Exception {
+		Gson gson = new GsonBuilder().create();
+		Pet[] pets = {new Pet("Waldo", "Dog")};
+		DataObject data = new DataObject(pets);
+
+		SearchRequestParams params = new SearchRequestParams("Hopkins", data);
+
+		MockHttpServletRequestBuilder request = post("/json/serial")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(gson.toJson(params));
+
+		this.mvc.perform(request)
+				.andExpect(status().isOk())
+				.andExpect(content().string("Waldo"));
+	}
+
+	@Test
+	public void testJsonRawFile() throws Exception {
+		String json = getJSON("/data.json");
+
+		MockHttpServletRequestBuilder request = post("/json/stringfile")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(json);
+
+		this.mvc.perform(request)
+				.andExpect(status().isOk())
+				.andExpect(content().string("Waldo"));
+	}
+
+	private String getJSON(String path) throws Exception {
+		URL url = this.getClass().getResource(path);
+		return new String(Files.readAllBytes(Paths.get(url.getFile())));
+	}
+
+	static class SearchRequestParams {
+		final String kennelName;
+		final DataObject data;
+
+		SearchRequestParams(String kennelName, DataObject data) {
+			this.kennelName = kennelName;
+			this.data = data;
+		}
 	}
 
 }

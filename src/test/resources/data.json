@@ -1,0 +1,11 @@
+{
+  "kennelName":"Brickleberry",
+  "data":{
+    "pets":[
+      {
+        "name":"Waldo",
+        "type":"Dog"
+      }
+    ]
+  }
+}
