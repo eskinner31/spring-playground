@@ -113,4 +113,17 @@ public class HelloController {
         return kennel.getData().getPets()[0].getName().toString();
     }
 
+    /**
+     * JSON rendering Routes
+     */
+
+    @GetMapping("/render/json")
+    public Pet[] getAllPets() {
+        Pet[] pets = new Pet[] {
+                new Pet("Oliver", "Cat"),
+                new Pet("Dodger", "Dog")
+        };
+
+        return pets;
+    }
 }

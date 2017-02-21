@@ -18,12 +18,12 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
 
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(HelloController.class)
@@ -184,6 +184,19 @@ public class DemoApplicationTests {
 		this.mvc.perform(request)
 				.andExpect(status().isOk())
 				.andExpect(content().string("Waldo"));
+	}
+
+	/**
+	 * Render Json Test
+	 */
+
+	@Test
+	public void testJsonResponse() throws Exception {
+		this.mvc.perform(get("/render/json")
+					.accept(MediaType.APPLICATION_JSON_UTF8)
+					.contentType(MediaType.APPLICATION_JSON_UTF8))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$[0].name", is("Oliver")));
 	}
 
 	private String getJSON(String path) throws Exception {
